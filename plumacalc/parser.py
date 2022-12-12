@@ -1,6 +1,6 @@
 import ast
 from shlex import shlex
-from typing import NoReturn
+from typing import Any, List, NoReturn
 
 import black
 
@@ -47,7 +47,7 @@ def _concat_dotted_numbers(expression: str) -> list[str]:
     return stack
 
 
-def _make_num(postfix):
+def _make_num(postfix: list[str]) -> list[str | int | float]:
     """Make numbers int | float and return the postfix list"""
     new_list = []
     num_or_op: str | int | float
@@ -63,21 +63,25 @@ def _make_num(postfix):
     return new_list
 
 
-def _concat_unary_minus(postfix):
+def _concat_unary_minus(postfix: list[str]) -> list[str | int | float]:
     """Apply unary minus to numbers
 
     e.g.
     make all [..., NUMBER, '-', ...] to this: [..., -NUMBER, ...]
     """
     postfix = _make_num(postfix)  # type: ignore
-    stack = []
+    stack: list[int | float | str] = []
     for item in postfix:
-        if isinstance(item, int):
+        if isinstance(item, (int, float)):
             stack.append(item)
         elif item == "-":
-            if isinstance(stack[-1], int):
+            if isinstance(stack[-1], (int, float)):
                 last = stack.pop()
-                stack.append(int("-" + str(last)))
+                if not stack:
+                    stack.append(_make_num(["-" + str(last)])[0])
+                else:
+                    stack.append(last)
+                    stack.append(item)
             else:
                 stack.append(item)
         else:
