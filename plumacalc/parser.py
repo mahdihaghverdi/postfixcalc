@@ -25,7 +25,10 @@ def _syntax_check(expression: str) -> bool | NoReturn:
 
 def _black_format(expression: str) -> str:
     """Reformat the expression based on PEP8"""
-    return black.format_str(expression, mode=black.Mode())
+    return black.format_str(
+        expression.replace("^", "**"),
+        mode=black.Mode(),
+    ).replace("**", "^")
 
 
 def _concat_dotted_numbers(expression: str) -> list[str]:
