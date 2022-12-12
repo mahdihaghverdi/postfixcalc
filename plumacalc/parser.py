@@ -12,7 +12,27 @@ priorities = {
     "*": 2,
     "/": 2,
     "^": 3,
+    "(": 4,
 }
+
+
+def _concat_dotted_numbers(expression: str) -> list[str]:
+    """Return a concat nums with fraction dots"""
+    # 1. [..., '.', '1', ...] -> [..., '0.1', ...]
+    # 2. [..., '1', '.', '1', ...] -> [..., '1.1', ...]
+    stack: list[str] = []
+    for char in shlex(expression):
+        if stack and (char.isdigit() and stack[-1] == "."):
+            stack.pop()
+            # case 1
+            if (not stack) or (not stack[-1].isdigit()):
+                stack.append(f"0.{char}")
+            else:
+                left = stack.pop()
+                stack.append(f"{left}.{char}")
+        else:
+            stack.append(char)
+    return stack
 
 
 def syntax_check(expression: str) -> bool | NoReturn:
@@ -87,6 +107,3 @@ def concat_unary_minus(postfix: "RawPostfix") -> "ParsedPostfix":
             "For this cases you must write: `n * (-m)`",
         )
     return stack
-
-
-print(concat_unary_minus(infix_to_postfix("2 * -1")))
