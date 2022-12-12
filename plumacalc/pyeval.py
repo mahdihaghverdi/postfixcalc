@@ -1,6 +1,6 @@
 from operator import add, mul, sub, truediv
 
-from .typings import ParsedPostfix, Result
+from plumacalc import infix_to_postfix
 
 eval_ops = {
     "+": add,
@@ -11,12 +11,12 @@ eval_ops = {
 }
 
 
-def evaluate(postfix: "ParsedPostfix") -> "Result":
+def evaluate(postfix: list[str | int | float]) -> int | float:
     """Simple postfix notation evaluate function"""
     res = 0
     eval_stack = []
     for num_or_op in postfix:
-        if isinstance(num_or_op, int):
+        if isinstance(num_or_op, (int, float)):
             eval_stack.append(num_or_op)
             continue
         else:
