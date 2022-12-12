@@ -23,12 +23,14 @@ def _syntax_check(expression: str) -> bool | NoReturn:
     )
 
 
-def _black_format(expression: str) -> str:
+def _black_format(expression: str) -> str | NoReturn:
     """Reformat the expression based on PEP8"""
-    return black.format_str(
-        expression.replace("^", "**"),
-        mode=black.Mode(),
-    ).replace("**", "^")
+    if _syntax_check(expression):
+        return black.format_str(
+            expression.replace("^", "**"),
+            mode=black.Mode(),
+        ).replace("**", "^")
+    return ""
 
 
 def _concat_dotted_numbers(expression: str) -> list[str]:
@@ -43,34 +45,6 @@ def _concat_dotted_numbers(expression: str) -> list[str]:
         else:
             stack.append(char)
     return stack
-
-
-def infix_to_postfix(expression: str):
-    """Return a list of strings but ordered in postfix
-
-    This function does not care about unary ops, e.g. -1 or +1
-    """
-    ops_stack, digits_stack = [], []
-    for character in shlex(expression):
-        if character not in ops:
-            digits_stack.append(character)
-        elif character == "(":
-            ops_stack.append("(")
-        elif character == ")":
-            while ops_stack and ops_stack[-1] != "(":
-                digits_stack.append(ops_stack.pop())
-            ops_stack.pop()
-        else:
-            while (
-                ops_stack
-                and ops_stack[-1] != "("
-                and priorities[character] <= priorities[ops_stack[-1]]
-            ):
-                digits_stack.append(ops_stack.pop())
-            ops_stack.append(character)
-    while ops_stack:
-        digits_stack.append(ops_stack.pop())
-    return digits_stack
 
 
 def _make_num(postfix):
@@ -89,7 +63,7 @@ def _make_num(postfix):
     return new_list
 
 
-def concat_unary_minus(postfix):
+def _concat_unary_minus(postfix):
     """Apply unary minus to numbers
 
     e.g.
@@ -117,4 +91,29 @@ def concat_unary_minus(postfix):
     return stack
 
 
-print(_black_format(".1 ** 3"))
+def infix_to_postfix(expression: str) -> list[str | int | float]:
+    """Return a list of strings but ordered in postfix
+
+    This function DOES care about unary minus, e.g. -1
+    """
+    ops_stack, postfix = [], []
+    for character in _concat_dotted_numbers(_black_format(expression)):
+        if character not in ops:
+            postfix.append(character)
+        elif character == "(":
+            ops_stack.append("(")
+        elif character == ")":
+            while ops_stack and ops_stack[-1] != "(":
+                postfix.append(ops_stack.pop())
+            ops_stack.pop()
+        else:
+            while (
+                ops_stack
+                and ops_stack[-1] != "("
+                and priorities[character] <= priorities[ops_stack[-1]]
+            ):
+                postfix.append(ops_stack.pop())
+            ops_stack.append(character)
+    while ops_stack:
+        postfix.append(ops_stack.pop())
+    return _concat_unary_minus(postfix)
