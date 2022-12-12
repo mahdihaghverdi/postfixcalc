@@ -2,7 +2,7 @@ import ast
 from shlex import shlex
 from typing import NoReturn
 
-from plumacalc.typings import ParsedPostfix, RawPostfix
+import black
 
 ops = {"+", "-", "*", "/", "(", ")", "^"}
 
@@ -14,6 +14,18 @@ priorities = {
     "^": 3,
     "(": 4,
 }
+
+
+def _syntax_check(expression: str) -> bool | NoReturn:
+    """Check the syntax of entered expression"""
+    return bool(
+        ast.parse(expression.translate(str.maketrans({"^": "**"}))),  # type: ignore
+    )
+
+
+def _black_format(expression: str) -> str:
+    """Reformat the expression based on PEP8"""
+    return black.format_str(expression, mode=black.Mode())
 
 
 def _concat_dotted_numbers(expression: str) -> list[str]:
@@ -35,13 +47,7 @@ def _concat_dotted_numbers(expression: str) -> list[str]:
     return stack
 
 
-def syntax_check(expression: str) -> bool | NoReturn:
-    return bool(
-        ast.parse(expression.translate(str.maketrans({"^": "**"}))),  # type: ignore
-    )
-
-
-def infix_to_postfix(expression: str) -> "RawPostfix":
+def infix_to_postfix(expression: str):
     """Return a list of strings but ordered in postfix
 
     This function does not care about unary ops, e.g. -1 or +1
@@ -69,9 +75,9 @@ def infix_to_postfix(expression: str) -> "RawPostfix":
     return digits_stack
 
 
-def _inter(postfix: "RawPostfix") -> "ParsedPostfix":
+def _inter(postfix):
     """Make numbers int and return the postfix list"""
-    new_list: "ParsedPostfix" = []
+    new_list = []
     for num_or_op in postfix:
         try:
             num_or_op = int(num_or_op)  # type: ignore
@@ -81,14 +87,14 @@ def _inter(postfix: "RawPostfix") -> "ParsedPostfix":
     return new_list
 
 
-def concat_unary_minus(postfix: "RawPostfix") -> "ParsedPostfix":
+def concat_unary_minus(postfix):
     """Apply unary minus to numbers
 
     e.g.
     make all [..., NUMBER, '-', ...] to this: [..., -NUMBER, ...]
     """
     postfix = _inter(postfix)  # type: ignore
-    stack: "ParsedPostfix" = []
+    stack = []
     for item in postfix:
         if isinstance(item, int):
             stack.append(item)
