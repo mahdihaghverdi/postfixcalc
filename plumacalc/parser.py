@@ -30,18 +30,13 @@ def _black_format(expression: str) -> str:
 
 def _concat_dotted_numbers(expression: str) -> list[str]:
     """Return a concat nums with fraction dots"""
-    # 1. [..., '.', '1', ...] -> [..., '0.1', ...]
     # 2. [..., '1', '.', '1', ...] -> [..., '1.1', ...]
     stack: list[str] = []
     for char in shlex(expression):
         if stack and (char.isdigit() and stack[-1] == "."):
             stack.pop()
-            # case 1
-            if (not stack) or (not stack[-1].isdigit()):
-                stack.append(f"0.{char}")
-            else:
-                left = stack.pop()
-                stack.append(f"{left}.{char}")
+            left = stack.pop()
+            stack.append(f"{left}.{char}")
         else:
             stack.append(char)
     return stack
@@ -113,3 +108,6 @@ def concat_unary_minus(postfix):
             "For this cases you must write: `n * (-m)`",
         )
     return stack
+
+
+print(_black_format(".1 ** 3"))
