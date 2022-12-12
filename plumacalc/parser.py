@@ -73,14 +73,18 @@ def infix_to_postfix(expression: str):
     return digits_stack
 
 
-def _inter(postfix):
-    """Make numbers int and return the postfix list"""
+def _make_num(postfix):
+    """Make numbers int | float and return the postfix list"""
     new_list = []
+    num_or_op: str | int | float
     for num_or_op in postfix:
         try:
-            num_or_op = int(num_or_op)  # type: ignore
+            num_or_op = float(num_or_op)
         except ValueError:
             pass
+        else:
+            if num_or_op.is_integer():
+                num_or_op = int(num_or_op)
         new_list.append(num_or_op)
     return new_list
 
@@ -91,7 +95,7 @@ def concat_unary_minus(postfix):
     e.g.
     make all [..., NUMBER, '-', ...] to this: [..., -NUMBER, ...]
     """
-    postfix = _inter(postfix)  # type: ignore
+    postfix = _make_num(postfix)  # type: ignore
     stack = []
     for item in postfix:
         if isinstance(item, int):
