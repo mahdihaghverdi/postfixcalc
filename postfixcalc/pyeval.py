@@ -1,5 +1,8 @@
 from operator import add, mul, sub, truediv
 
+from postfixcalc import infix_to_postfix
+from postfixcalc.typings import ListExpression
+
 eval_ops = {
     "+": add,
     "-": sub,
@@ -9,7 +12,7 @@ eval_ops = {
 }
 
 
-def evaluate(postfix: list[str | int | float]) -> int | float:
+def _evaluate(postfix: "ListExpression") -> int | float:
     """Simple postfix notation evaluate function"""
     res = 0
     eval_stack = []
@@ -23,7 +26,11 @@ def evaluate(postfix: list[str | int | float]) -> int | float:
                 left = eval_stack.pop()
             except IndexError:
                 # unary operation
-                left = 0
+                left = 0 if num_or_op in {"-", "+"} else 1
             res = eval_ops[num_or_op](left, right)  # type: ignore
             eval_stack.append(res)
     return res
+
+
+def evaluate(expression: str) -> int | float:
+    return _evaluate(infix_to_postfix(expression))

@@ -1,10 +1,11 @@
 import ast
+import typing
 from collections.abc import Iterable, Sequence
-from typing import cast, Union
+from typing import Union, cast
 
 import black
 
-from postfixcalc.typings import ast_ops, ListExpression, ListPostfix, TupleExpression
+from postfixcalc.typings import ListExpression, ListPostfix, TupleExpression, ast_ops
 
 operators_names: dict[ast_ops, str] = {
     ast.Add: "+",
@@ -33,6 +34,7 @@ def _parse(expression: str) -> "ast.expr":
     return ast.parse(expression.strip().replace("^", "**"), mode="eval").body
 
 
+@typing.no_type_check
 def _extract_nums_and_ops(node: "ast.expr") -> "ListExpression":
     """Extract numbers, and operators from the parsed expression"""
     stack: "ListExpression" = []
@@ -46,18 +48,26 @@ def _extract_nums_and_ops(node: "ast.expr") -> "ListExpression":
                 _extract_nums_and_ops(node.left),
                 node.op,
                 _extract_nums_and_ops(node.right),
-            )
+            ),
         )
     else:
         raise TypeError(node)
     return stack
 
 
-def _tuplize_nodes(nums_and_ops: Union["ListExpression", Sequence]) -> "TupleExpression":
+@typing.no_type_check
+def _tuplize_nodes(
+    nums_and_ops: Union["ListExpression", Sequence],
+) -> "TupleExpression":
     """Make anything be a tuple, just to be convenient"""
     to_ret = []
     for thing in nums_and_ops:
-        if isinstance(thing, list) and len(thing) == 1 and isinstance(thing[0], (int, float)):  # for [number] case
+        # for [number] case
+        if (
+            isinstance(thing, list)
+            and len(thing) == 1
+            and isinstance(thing[0], (int, float))
+        ):
             to_ret.append(thing)
         elif isinstance(thing, Sequence):
             to_ret.append(tuple(_tuplize_nodes(thing)))
@@ -66,11 +76,17 @@ def _tuplize_nodes(nums_and_ops: Union["ListExpression", Sequence]) -> "TupleExp
     return tuple(to_ret)
 
 
+@typing.no_type_check
 def _flatten_nodes(nums_and_ops: "ListExpression") -> "TupleExpression":
     """Flatten the extracted numbers and operators"""
     stack = []
     for thing in nums_and_ops[0]:
-        if isinstance(thing, list) and len(thing) == 1 and isinstance(thing[0], (int, float)):  # for [number] case
+        # for [number] case
+        if (
+            isinstance(thing, list)
+            and len(thing) == 1
+            and isinstance(thing[0], (int, float))
+        ):
             stack.append(thing)
         elif isinstance(thing, Iterable):
             stack.extend(thing)
@@ -79,6 +95,7 @@ def _flatten_nodes(nums_and_ops: "ListExpression") -> "TupleExpression":
     return _tuplize_nodes(stack)
 
 
+@typing.no_type_check
 def _restrexpression(flattened: list | tuple) -> str:
     """Generate the str repr of the parsed expression, This is just for visual aspects
 
@@ -86,7 +103,10 @@ def _restrexpression(flattened: list | tuple) -> str:
     """
     what = ""
     for listnum_op_tuple in flattened:
-        if isinstance(listnum_op_tuple, list) and isinstance(listnum_op_tuple[0], (int, float)):
+        if isinstance(listnum_op_tuple, list) and isinstance(
+            listnum_op_tuple[0],
+            (int, float),
+        ):
             what += str(listnum_op_tuple[0])
         elif isinstance(listnum_op_tuple, ast.AST):
             what += operators_names[type(cast(ast_ops, listnum_op_tuple))]
@@ -95,6 +115,7 @@ def _restrexpression(flattened: list | tuple) -> str:
     return black.format_str(mode=black.Mode(), src_contents=what)
 
 
+@typing.no_type_check
 def _make_num(postfix: "ListPostfix") -> "ListPostfix":
     """Make numbers int | float and return the postfix list"""
     new_list = []
@@ -111,6 +132,7 @@ def _make_num(postfix: "ListPostfix") -> "ListPostfix":
     return new_list
 
 
+@typing.no_type_check
 def _relistexpression(flattened: list | tuple) -> "ListPostfix":
     """Generate a parenthesized and typed expression"""
     what = []
@@ -131,10 +153,11 @@ def _relistexpression(flattened: list | tuple) -> "ListPostfix":
     return what
 
 
+@typing.no_type_check
 def infix_to_postfix(expr: str) -> "ListPostfix":
     """A two stack solution to generate a postfix expression out of an infix expression"""
     expression = _make_num(
-        _relistexpression(_flatten_nodes(_extract_nums_and_ops(_parse(expr))))
+        _relistexpression(_flatten_nodes(_extract_nums_and_ops(_parse(expr)))),
     )
     ops_stack: list[str] = []
     postfix: "ListPostfix" = []
