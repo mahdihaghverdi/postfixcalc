@@ -1,3 +1,9 @@
+- v0.4.0
+  - Bump to version v0.4.0, update CHANGELOG.md
+  - make the `evaluate` api better and test it
+  - write a brand-new parser with the help of python `ast` module
+  - add README.md
+
 - v0.3.0
   - Prepare package to be published to PyPI
 - v0.2.0

@@ -1,7 +1,7 @@
 from operator import add, mul, sub, truediv
 
-from postfixcalc import infix_to_postfix
-from postfixcalc.typings import ListExpression
+from . import infix_to_postfix
+from .typings import ListExpression
 
 eval_ops = {
     "+": add,

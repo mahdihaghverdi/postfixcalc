@@ -5,7 +5,7 @@ from typing import Union, cast
 
 import black
 
-from postfixcalc.typings import ListExpression, ListPostfix, TupleExpression, ast_ops
+from .typings import ListExpression, ListPostfix, TupleExpression, ast_ops
 
 operators_names: dict[ast_ops, str] = {
     ast.Add: "+",
