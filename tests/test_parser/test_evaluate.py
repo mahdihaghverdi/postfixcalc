@@ -1,4 +1,4 @@
-from plumacalc import evaluate, infix_to_postfix
+from postfixcalc import evaluate, infix_to_postfix
 
 
 def test_evaluate():

@@ -1,4 +1,4 @@
-from plumacalc import _make_num
+from postfixcalc import _make_num
 
 
 def test_make_num():

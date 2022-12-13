@@ -1,9 +1,6 @@
-import pathlib
-import sys
 from shlex import shlex
 
-sys.path += [str(pathlib.Path(__file__).parent.parent.parent)]
-from plumacalc import _concat_dotted_numbers  # noqa
+from postfixcalc import _concat_dotted_numbers
 
 
 def test_concat_dotted_numbers():

@@ -1,4 +1,4 @@
-from plumacalc import _black_format
+from postfixcalc import _black_format
 
 
 def test_black_format():

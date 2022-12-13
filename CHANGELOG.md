@@ -1,0 +1,22 @@
+- v0.3.0
+  - Prepare package to be published to PyPI
+- v0.2.0
+  - upload source package
+  - rename to be postfixcalc
+  - rename plumacalc to postfixcalc
+  - fix some bugs of infix_to_postfix
+  - reimplement evaluate funcion and test it
+  - reimplement infix_to_postfix and test it
+  - refactor _inter to be `_make_num` and make it more flexible to translate `n.m` to float and test it
+  - replace `**` with `^` of _black_format function and test it
+  - remove `.n` parsing of _concat_dotted_numbers function
+  - write black_format function and remove type hints
+  - implement a function to concat dotted fraction numbers and test it
+- v0.1.0
+  - write down a simple evaluate function
+  - initialize the parser of str math expressions
+  - define main type aliases
+  - Make plumacalc a package and refactor main.py to __main__.py
+  - Initial Commit
+  - Add online IDE url
+  - Initial commit

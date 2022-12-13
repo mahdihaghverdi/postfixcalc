@@ -1,7 +1,5 @@
 from operator import add, mul, sub, truediv
 
-from plumacalc import infix_to_postfix
-
 eval_ops = {
     "+": add,
     "-": sub,

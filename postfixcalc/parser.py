@@ -1,6 +1,6 @@
 import ast
 from shlex import shlex
-from typing import Any, List, NoReturn
+from typing import NoReturn
 
 import black
 
