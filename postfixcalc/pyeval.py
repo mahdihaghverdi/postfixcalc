@@ -1,6 +1,15 @@
+from functools import cached_property
 from operator import add, mul, sub, truediv
 
-from . import infix_to_postfix
+from .ast_parser import (
+    extract_nums_and_ops,
+    flatten_nodes,
+    infix_to_postfix,
+    make_num,
+    parse,
+    relistexpression,
+    restrexpression,
+)
 from .typings import ListExpression
 
 eval_ops = {
@@ -12,7 +21,7 @@ eval_ops = {
 }
 
 
-def _evaluate(postfix: "ListExpression") -> int | float:
+def evaluate(postfix: "ListExpression") -> int | float:
     """Simple postfix notation evaluate function"""
     res = 0
     eval_stack = []
@@ -32,5 +41,38 @@ def _evaluate(postfix: "ListExpression") -> int | float:
     return res
 
 
-def evaluate(expression: str) -> int | float:
-    return _evaluate(infix_to_postfix(expression))
+class Calc:
+    def __init__(self, expr: str):
+        self.expr = expr
+
+    @cached_property
+    def parsed(self):
+        return parse(self.expr)
+
+    @cached_property
+    def extracted(self):
+        return extract_nums_and_ops(self.parsed)
+
+    @cached_property
+    def flattened(self):
+        return flatten_nodes(self.extracted)
+
+    @cached_property
+    def strparenthesized(self):
+        return restrexpression(self.flattened)
+
+    @cached_property
+    def listparenthesized(self):
+        return relistexpression(self.flattened)
+
+    @cached_property
+    def numerized(self):
+        return make_num(self.listparenthesized)
+
+    @cached_property
+    def postfix(self):
+        return infix_to_postfix(self.numerized)
+
+    @cached_property
+    def answer(self):
+        return evaluate(self.postfix)

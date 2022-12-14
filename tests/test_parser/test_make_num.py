@@ -1,5 +1,5 @@
-from postfixcalc import _make_num
+from postfixcalc.ast_parser import make_num
 
 
 def test_make_num():
-    assert _make_num(["1", "1.1", "^"]) == [1, 1.1, "^"]
+    assert make_num(["1", "1.1", "^"]) == [1, 1.1, "^"]

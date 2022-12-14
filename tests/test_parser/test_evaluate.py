@@ -1,6 +1,14 @@
 import math
 
-from postfixcalc import evaluate
+from postfixcalc.ast_parser import (
+    extract_nums_and_ops,
+    flatten_nodes,
+    infix_to_postfix,
+    make_num,
+    parse,
+    relistexpression,
+)
+from postfixcalc.pyeval import evaluate
 
 
 def test_evaluate():
@@ -13,4 +21,17 @@ def test_evaluate():
         "123 + 43 - 8 * 7 ** 2 * - 1 + 2 / 3 ** (1 + 2)": 558.074074074074,
     }
     for expr, answer in to_evals.items():
-        assert math.isclose(eval(expr), evaluate(expr.replace("**", "^")))
+        assert math.isclose(
+            eval(expr),
+            evaluate(
+                infix_to_postfix(
+                    make_num(
+                        relistexpression(
+                            flatten_nodes(
+                                extract_nums_and_ops(parse(expr.replace("**", "^"))),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )

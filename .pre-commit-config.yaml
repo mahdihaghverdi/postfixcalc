@@ -43,11 +43,11 @@ repos:
     rev: 4.0.1
     hooks:
     -   id: flake8
-#-   repo: local # take from https://stackoverflow.com/a/64014324/19510840 (auther of pre-commit)
-#    hooks:
-#      - id: pytest-check
-#        name: pytest-check
-#        entry: pytest
-#        language: system
-#        pass_filenames: false
-#        always_run: true
+-   repo: local # take from https://stackoverflow.com/a/64014324/19510840 (auther of pre-commit)
+    hooks:
+      - id: pytest-check
+        name: pytest-check
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: true
