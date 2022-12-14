@@ -1,3 +1,8 @@
+- v0.5.0
+  - Bump to version v0.5.0
+  - Fix the bug for one digit input and complete the README.md
+  - Write `Calc` type and change how user should use this lib
+
 - v0.4.0
   - Bump to version v0.4.0, update CHANGELOG.md
   - make the `evaluate` api better and test it
