@@ -1,6 +1,7 @@
 import ast
 import typing
 from collections.abc import Iterable, Sequence
+from numbers import Number
 from typing import Union, cast
 
 import black
@@ -55,6 +56,12 @@ def extract_nums_and_ops(node: "ast.expr") -> "ListExpression":
     return stack
 
 
+def _check_one_arg_passed(what):
+    if len(what) == 1 and isinstance(what[0], Number):
+        return (what[0],)
+    return False
+
+
 @typing.no_type_check
 def tuplize_nodes(
     nums_and_ops: Union["ListExpression", Sequence],
@@ -80,6 +87,9 @@ def tuplize_nodes(
 def flatten_nodes(nums_and_ops: "ListExpression") -> "TupleExpression":
     """Flatten the extracted numbers and operators"""
     stack = []
+    if (what := _check_one_arg_passed(nums_and_ops)) is not False:
+        return what
+
     for thing in nums_and_ops[0]:
         # for [number] case
         if (
@@ -102,6 +112,9 @@ def restrexpression(flattened: list | tuple) -> str:
     It reformats the generated numerized with `black.format_str`
     """
     what = ""
+    if (_ := _check_one_arg_passed(flattened)) is not False:
+        return _
+
     for listnum_op_tuple in flattened:
         if isinstance(listnum_op_tuple, list) and isinstance(
             listnum_op_tuple[0],
@@ -112,7 +125,7 @@ def restrexpression(flattened: list | tuple) -> str:
             what += operators_names[type(cast(ast_ops, listnum_op_tuple))]
         else:
             what += "(" + restrexpression(listnum_op_tuple) + ")"
-    return black.format_str(mode=black.Mode(), src_contents=what)
+    return black.format_str(mode=black.Mode(), src_contents=what).strip()
 
 
 @typing.no_type_check
@@ -120,6 +133,19 @@ def make_num(postfix: "ListPostfix") -> "ListPostfix":
     """Make numbers int | float and return the postfix list"""
     new_list = []
     num_or_op: str | int | float
+
+    if len(postfix) == 1 and len(postfix[0]) == 1 and isinstance(postfix[0][0], Number):
+        num_or_op = postfix[0][0]
+        try:
+            num_or_op = float(num_or_op)
+        except ValueError:
+            pass
+        else:
+            if num_or_op.is_integer():
+                num_or_op = int(num_or_op)
+        new_list.append(num_or_op)
+        return new_list
+
     for num_or_op in postfix:
         try:
             num_or_op = float(num_or_op)
@@ -136,6 +162,9 @@ def make_num(postfix: "ListPostfix") -> "ListPostfix":
 def relistexpression(flattened: list | tuple) -> "ListPostfix":
     """Generate a parenthesized and typed numerized"""
     what = []
+    if (_ := _check_one_arg_passed(flattened)) is not False:
+        return [_]
+
     for num_op_tuple in flattened:
         if isinstance(num_op_tuple, list) and isinstance(num_op_tuple[0], (int, float)):
             what.append(num_op_tuple[0])

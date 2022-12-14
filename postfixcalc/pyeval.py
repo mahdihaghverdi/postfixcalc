@@ -1,4 +1,5 @@
 from functools import cached_property
+from numbers import Number
 from operator import add, mul, sub, truediv
 
 from .ast_parser import (
@@ -25,6 +26,9 @@ def evaluate(postfix: "ListExpression") -> int | float:
     """Simple postfix notation evaluate function"""
     res = 0
     eval_stack = []
+    if len(postfix) == 1 and isinstance(postfix[0], Number):
+        return postfix[0]
+
     for num_or_op in postfix:
         if isinstance(num_or_op, (int, float)):
             eval_stack.append(num_or_op)
@@ -76,3 +80,6 @@ class Calc:
     @cached_property
     def answer(self):
         return evaluate(self.postfix)
+
+    def __repr__(self):
+        return f"Calc(expr={self.expr}, answer={self.answer})"
