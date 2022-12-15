@@ -58,7 +58,7 @@ def extract_nums_and_ops(node: "ast.expr") -> "ListExpression":
 
 def _check_one_arg_passed(what):
     if len(what) == 1 and isinstance(what[0], Number):
-        return (what[0],)
+        return what[0],
     return False
 
 
@@ -113,7 +113,7 @@ def restrexpression(flattened: list | tuple) -> str:
     """
     what = ""
     if (_ := _check_one_arg_passed(flattened)) is not False:
-        return _
+        return str(_)
 
     for listnum_op_tuple in flattened:
         if isinstance(listnum_op_tuple, list) and isinstance(
