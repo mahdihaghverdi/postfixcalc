@@ -1,5 +1,7 @@
 import math
 
+import pytest
+
 from postfixcalc.ast_parser import (
     extract_nums_and_ops,
     flatten_nodes,
@@ -20,7 +22,7 @@ def test_evaluate():
         "1 * (2 / (2 ** (-1 + 2 * -1))) ** 3",
         "123 + 43 - 8 * 7 ** 2 * - 1 + 2 / 3 ** (1 + 2)",
         "-(-1 - 3)",
-        "--(-1 -3)"
+        "--(-1 -3)",
     ]
     for expr in to_evals:
         assert math.isclose(
@@ -36,5 +38,5 @@ def test_evaluate():
                     ),
                 ),
             ),
-            rel_tol=0.001
+            rel_tol=0.001,
         )

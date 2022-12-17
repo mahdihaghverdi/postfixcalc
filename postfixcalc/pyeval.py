@@ -1,3 +1,4 @@
+import multiprocessing
 from functools import cached_property
 from numbers import Number
 from operator import add, mul, sub, truediv
@@ -46,8 +47,9 @@ def evaluate(postfix: "ListExpression") -> int | float:
 
 
 class Calc:
-    def __init__(self, expr: str):
+    def __init__(self, expr: str, timeout: int | float = 0.5):
         self.expr = expr
+        self.timeout = timeout
 
     @cached_property
     def parsed(self):
@@ -79,6 +81,14 @@ class Calc:
 
     @cached_property
     def answer(self):
+        process = multiprocessing.Process(target=evaluate, args=(self.postfix,))
+        process.start()
+        process.join(self.timeout)
+        if process.is_alive():
+            process.terminate()
+            raise TimeoutError(
+                f"Calculations of {self.strparenthesized!r} took longer than {self.timeout} seconds",
+            )
         return evaluate(self.postfix)
 
     def __repr__(self):
