@@ -47,7 +47,7 @@ def evaluate(postfix: "ListExpression") -> int | float:
 
 
 class Calc:
-    def __init__(self, expr: str, timeout: int | float = 0.5):
+    def __init__(self, expr: str, timeout: int | float = 0.1):
         self.expr = expr
         self.timeout = timeout
 

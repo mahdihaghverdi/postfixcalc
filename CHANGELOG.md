@@ -1,3 +1,7 @@
+- v0.6.0
+  - bump to version v0.6.0
+  - Make the calculations safe with multiprocessing => put a timeout on processing the `answer`
+
 - v0.5.0
   - Bump to version v0.5.0
   - Fix the bug for one digit input and complete the README.md
