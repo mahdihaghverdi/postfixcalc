@@ -1,21 +1,26 @@
-- v0.6.0
-  - bump to version v0.6.0
+- `v0.7.0`
+  - bump to version `v0.7.0`
+  - Implement `stranswer` property and test it
+
+- `v0.6.0`
+  - bump to version `v0.6.0`
   - Make the calculations safe with multiprocessing => put a timeout on processing the `answer`
 
-- v0.5.0
-  - Bump to version v0.5.0
+- `v0.5.0`
+  - Bump to version `v0.5.0`
   - Fix the bug for one digit input and complete the README.md
   - Write `Calc` type and change how user should use this lib
 
-- v0.4.0
-  - Bump to version v0.4.0, update CHANGELOG.md
+- `v0.4.0`
+  - Bump to version `v0.4.0`
   - make the `evaluate` api better and test it
   - write a brand-new parser with the help of python `ast` module
   - add README.md
 
-- v0.3.0
+- `v0.3.0`
   - Prepare package to be published to PyPI
-- v0.2.0
+
+- `v0.2.0`
   - upload source package
   - rename to be postfixcalc
   - rename plumacalc to postfixcalc
@@ -27,7 +32,8 @@
   - remove `.n` parsing of _concat_dotted_numbers function
   - write black_format function and remove type hints
   - implement a function to concat dotted fraction numbers and test it
-- v0.1.0
+
+- `v0.1.0`
   - write down a simple evaluate function
   - initialize the parser of str math expressions
   - define main type aliases
