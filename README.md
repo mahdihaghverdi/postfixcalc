@@ -72,3 +72,13 @@ print(c.stranswer)
 # -2
 # -2
 ```
+
+# Important notes
+1. For safety reasons, calculations are done with a timeout which is absolutely easy to change:
+```python
+c = Calc('...', timeout=10)
+```
+timeout is in seconds.
+
+2. `answer` property returns the actual object of the answer, whether it is `int` or `float`, BUT if you want to `print` the answer, you should consider the `obj to str conversion` time, it may be quite long or short depending on that obj; because of this `Calc` implements a new propery called `stranswer` which calculates the str repr with a timeout and raises exceptions if it would take long
+Always use `stranswer` if you want the str repr of the `answer`
