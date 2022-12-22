@@ -19,6 +19,6 @@ def test_termination():
         == f"{e.value}"
     )
 
-    c = Calc("(2 ^ 32) ^ (2 ^ 18)")
-    with pytest.raises(TimeoutError):
+    c = Calc("(2 ^ 32) ^ (2 ^ 15)")
+    with pytest.raises(expected_exception=(TimeoutError, ValueError)):  # noqa
         print(c.stranswer)

@@ -109,7 +109,12 @@ class Calc:
             raise TimeoutError(
                 f"Generating a string representation of {self.strparenthesized!r} took longer than {self.timeout} seconds",
             ) from None
-        return str(self.answer)
+        try:
+            return str(self.answer)
+        except ValueError:
+            raise TimeoutError(
+                f"Generating a string representation of {self.strparenthesized!r} took longer than {self.timeout} seconds",
+            ) from None
 
     def __repr__(self):
         return f"Calc(expr={self.expr}, answer={self.answer})"
