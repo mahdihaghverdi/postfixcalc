@@ -1,3 +1,7 @@
+- `v.0.7.1`
+  - bump to version `v0.7.1`
+  - fix integer str conversion
+
 - `v0.7.0`
   - bump to version `v0.7.0`
   - Implement `stranswer` property and test it
