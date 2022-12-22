@@ -13,7 +13,12 @@ def test_termination():
     c = Calc("(2 ^ 32) ^ (2 ^ 32)")
     with pytest.raises(TimeoutError) as e:
         print(c.answer)
+
     assert (
         f"Calculations of {c.strparenthesized!r} took longer than {c.timeout} seconds"
         == f"{e.value}"
     )
+
+    c = Calc("(2 ^ 32) ^ (2 ^ 18)")
+    with pytest.raises(TimeoutError):
+        print(c.stranswer)

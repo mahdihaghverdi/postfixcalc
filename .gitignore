@@ -140,5 +140,4 @@ build
 # Pycharm
 .idea/
 
-experiments
-experiments/expr.py
+postfixcalc/expr.py

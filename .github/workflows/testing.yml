@@ -38,7 +38,7 @@ jobs:
         key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('pyproject.toml') }}
 
     # Install dependencies if cache does not exist
-    - name: Install dependencies and the todoproject package.
+    - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction
 

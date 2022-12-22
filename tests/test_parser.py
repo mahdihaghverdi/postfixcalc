@@ -1,6 +1,6 @@
 import pytest
 
-from postfixcalc.ast_parser import parse
+from postfixcalc.parser import parse
 
 
 def test_syntax_error():

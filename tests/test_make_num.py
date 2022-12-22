@@ -1,4 +1,4 @@
-from postfixcalc.ast_parser import make_num
+from postfixcalc.parser import make_num
 
 
 def test_make_num():

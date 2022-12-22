@@ -58,7 +58,7 @@ def extract_nums_and_ops(node: "ast.expr") -> "ListExpression":
 
 def _check_one_arg_passed(what):
     if len(what) == 1 and isinstance(what[0], Number):
-        return what[0],
+        return (what[0],)
     return False
 
 

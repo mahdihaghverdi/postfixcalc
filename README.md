@@ -4,9 +4,10 @@ Simple and stupid infix to postfix converter and evaluator.
 
 # How does it work
 The algorithm is very simple and straightforward
+
 ```python
 from postfixcalc.pyeval import evaluate
-from postfixcalc.ast_parser import (
+from postfixcalc.parser import (
     extract_nums_and_ops,
     flatten_nodes,
     infix_to_postfix,
@@ -14,7 +15,6 @@ from postfixcalc.ast_parser import (
     parse,
     relistexpression,
 )
-
 
 evaluate(
     infix_to_postfix(
@@ -60,6 +60,7 @@ print(c.listparenthesized)
 print(c.numerized)
 print(c.postfix)
 print(c.answer)
+print(c.stranswer)
 
 # <ast.BinOp object at 0x7fcd313ecbe0>
 # [([2], <ast.Mult object at 0x7fcd32002a70>, [(<ast.USub object at 0x7fcd32003010>, [1])])]
@@ -68,5 +69,6 @@ print(c.answer)
 # [2, '*', '(', '-1', ')']
 # [2, '*', '(', -1, ')']
 # [2, -1, '*']
+# -2
 # -2
 ```

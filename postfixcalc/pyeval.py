@@ -3,7 +3,7 @@ from functools import cached_property
 from numbers import Number
 from operator import add, mul, sub, truediv
 
-from .ast_parser import (
+from .parser import (
     extract_nums_and_ops,
     flatten_nodes,
     infix_to_postfix,
@@ -81,15 +81,35 @@ class Calc:
 
     @cached_property
     def answer(self):
+        """Calculate the answer respecting the `timeout`
+
+        IMPORTANT NOTE: DON'T CALL `print` ON THE RESULT OF THIS METHOD
+        This is because for instance calculating `(2 ^ 32) ^ (2 ^ 18)` is done under `timeout` BUT generating the str
+        repr WILL TAKE MUCH LONGER!!!
+
+        If you want to `print` the result, use `stranswer` method
+        """
         process = multiprocessing.Process(target=evaluate, args=(self.postfix,))
         process.start()
-        process.join(self.timeout)
+        process.join(timeout=self.timeout)
         if process.is_alive():
             process.terminate()
             raise TimeoutError(
                 f"Calculations of {self.strparenthesized!r} took longer than {self.timeout} seconds",
-            )
+            ) from None
         return evaluate(self.postfix)
+
+    @cached_property
+    def stranswer(self) -> str:
+        process = multiprocessing.Process(target=str, args=(self.answer,))
+        process.start()
+        process.join(self.timeout * 2)
+        if process.is_alive():
+            process.terminate()
+            raise TimeoutError(
+                f"Generating a string representation of {self.strparenthesized!r} took longer than {self.timeout} seconds",
+            ) from None
+        return str(self.answer)
 
     def __repr__(self):
         return f"Calc(expr={self.expr}, answer={self.answer})"

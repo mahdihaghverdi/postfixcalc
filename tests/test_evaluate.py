@@ -2,7 +2,7 @@ import math
 
 import pytest
 
-from postfixcalc.ast_parser import (
+from postfixcalc.parser import (
     extract_nums_and_ops,
     flatten_nodes,
     infix_to_postfix,
