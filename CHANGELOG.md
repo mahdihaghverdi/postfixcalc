@@ -1,3 +1,7 @@
+- `v0.7.2`
+ - bump to version `v0.7.2`
+ - fix error message of str repr
+
 - `v.0.7.1`
   - bump to version `v0.7.1`
   - fix integer str conversion
