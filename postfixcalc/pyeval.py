@@ -107,13 +107,19 @@ class Calc:
         if process.is_alive():
             process.terminate()
             raise TimeoutError(
-                f"Generating a string representation of {self.strparenthesized!r} took longer than {self.timeout} seconds",
+                (
+                    f"Generating a string representation of {self.strparenthesized!r} "
+                    f"took longer than {self.timeout * 2} seconds"
+                ),
             ) from None
         try:
             return str(self.answer)
         except ValueError:
             raise TimeoutError(
-                f"Generating a string representation of {self.strparenthesized!r} took longer than {self.timeout} seconds",
+                (
+                    f"Generating a string representation of {self.strparenthesized!r} "
+                    f"took longer than {self.timeout * 2} seconds"
+                ),
             ) from None
 
     def __repr__(self):
