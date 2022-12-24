@@ -1,3 +1,7 @@
+- `v0.8.0`
+  - bump to version `v0.8.0`
+  - add str_repr_timeout to `Calc` type
+
 - `v0.7.2`
  - bump to version `v0.7.2`
  - fix error message of str repr

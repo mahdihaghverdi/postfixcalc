@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "postfixcalc"
-version = "0.7.2"
+version = "0.8.0"
 description = "the stupid postfix evaluator"
 authors = ["Mahdi Haghverdi <mahdihaghverdiliewpl@gmail.com>"]
 license = "Apache2.0"

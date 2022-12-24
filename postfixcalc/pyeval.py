@@ -47,9 +47,15 @@ def evaluate(postfix: "ListExpression") -> int | float:
 
 
 class Calc:
-    def __init__(self, expr: str, timeout: int | float = 0.1):
+    def __init__(
+        self,
+        expr: str,
+        calc_timeout: int | float = 0.1,
+        str_repr_timeout: int | float = 0.2,
+    ):
         self.expr = expr
-        self.timeout = timeout
+        self.calc_timeout = calc_timeout
+        self.str_repr_timeout = str_repr_timeout
 
     @cached_property
     def parsed(self):
@@ -91,11 +97,11 @@ class Calc:
         """
         process = multiprocessing.Process(target=evaluate, args=(self.postfix,))
         process.start()
-        process.join(timeout=self.timeout)
+        process.join(timeout=self.calc_timeout)
         if process.is_alive():
             process.terminate()
             raise TimeoutError(
-                f"Calculations of {self.strparenthesized!r} took longer than {self.timeout} seconds",
+                f"Calculations of {self.strparenthesized!r} took longer than {self.calc_timeout} seconds",
             ) from None
         return evaluate(self.postfix)
 
@@ -103,23 +109,17 @@ class Calc:
     def stranswer(self) -> str:
         process = multiprocessing.Process(target=str, args=(self.answer,))
         process.start()
-        process.join(self.timeout * 2)
+        process.join(self.str_repr_timeout)
         if process.is_alive():
             process.terminate()
             raise TimeoutError(
-                (
-                    f"Generating a string representation of {self.strparenthesized!r} "
-                    f"took longer than {self.timeout * 2} seconds"
-                ),
+                f"Generating a string representation of {self.strparenthesized!r} took longer than {self.str_repr_timeout} seconds",
             ) from None
         try:
             return str(self.answer)
         except ValueError:
             raise TimeoutError(
-                (
-                    f"Generating a string representation of {self.strparenthesized!r} "
-                    f"took longer than {self.timeout * 2} seconds"
-                ),
+                f"Generating a string representation of {self.strparenthesized!r} took longer than {self.str_repr_timeout} seconds",
             ) from None
 
     def __repr__(self):
