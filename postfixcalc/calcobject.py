@@ -1,5 +1,6 @@
 import multiprocessing
 from functools import cached_property
+from typing import Optional
 
 from .parser import (
     extract_nums_and_ops,
@@ -72,8 +73,18 @@ class Calc:
             ) from None
         return evaluate(self.postfix)
 
-    @cached_property
-    def stranswer(self) -> str:  # add slicing support
+    def stranswer(
+        self,
+        beginning: Optional[int] = None,
+        ending: Optional[int] = None,
+    ) -> str:
+        """Return the string representation of the answer with the respect to the `str_repr_timeout`
+
+        beginning: see the first n digits of the answer: '982734...'
+        ending: see the last n digits of the answer: '...982734'
+
+        if both are specified: '987234...873242'
+        """
         process = multiprocessing.Process(target=str, args=(self.answer,))
         process.start()
         process.join(self.str_repr_timeout)
@@ -83,7 +94,18 @@ class Calc:
                 f"Generating a string representation of {self.expr!r} took longer than {self.str_repr_timeout} seconds",
             ) from None
         try:
-            return str(self.answer)
+            answer = str(self.answer)
+            match (beginning, ending):
+                case (None, None):
+                    return answer
+                case (x, None):
+                    return f"{answer[:x]}..."
+                case (None, x):
+                    return f"...{answer[-x:]}"
+                case (x, y):
+                    return f"{answer[:x]}...{answer[-y:]}"
+                case _:
+                    raise ValueError("Confusing beginning and ending")
         except ValueError:
             raise TimeoutError(
                 f"Generating a string representation of {self.expr!r} took longer than {self.str_repr_timeout} seconds",
