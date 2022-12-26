@@ -1,3 +1,8 @@
+- `v0.8.1`
+  - bump to version `v0.8.1`
+  - make `stranswer` a regular method, and add a slicing behaviour to it and test it;
+  - transfer `Calc` to calcobject.py module;
+
 - `v0.8.0`
   - bump to version `v0.8.0`
   - add str_repr_timeout to `Calc` type
