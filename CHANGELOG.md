@@ -1,3 +1,7 @@
+- `v0.8.2`
+  - bump to version `v0.8.2`
+  - Write a fabulous README.md;
+
 - `v0.8.1`
   - bump to version `v0.8.1`
   - make `stranswer` a regular method, and add a slicing behaviour to it and test it;
