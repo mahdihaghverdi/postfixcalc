@@ -15,7 +15,7 @@ def test_termination():
         print(c.answer)
 
     assert (
-        f"Calculations of {c.strparenthesized!r} took longer than {c.calc_timeout} seconds"
+        f"Calculations of {c.expr!r} took longer than {c.calc_timeout} seconds"
         == f"{e.value}"
     )
 
@@ -24,7 +24,7 @@ def test_termination():
         print(c.stranswer)
 
     assert (
-        f"Generating a string representation of {c.strparenthesized!r} "
+        f"Generating a string representation of {c.expr!r} "
         f"took longer than {c.str_repr_timeout} seconds"
     ) == f"{e.value}"
 
