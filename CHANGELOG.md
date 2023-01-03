@@ -1,3 +1,7 @@
+- `v0.8.4`
+  - bump to version `v0.8.4`
+  - Update pyproject.toml
+
 - `v0.8.2`
   - bump to version `v0.8.2`
   - Write a fabulous README.md;
