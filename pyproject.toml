@@ -1,10 +1,28 @@
 [tool.poetry]
 name = "postfixcalc"
-version = "0.8.2"
+version = "0.8.4"
 description = "the stupid postfix evaluator"
 authors = ["Mahdi Haghverdi <mahdihaghverdiliewpl@gmail.com>"]
-license = "Apache2.0"
+license = "LICENSE"
 readme = "README.md"
+repository = "https://github.com/mahdihaghverdi/postfixcalc"
+keywords = [
+    "parse",
+    "calculator",
+    "safe calculation",
+    "postfix",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Education",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Software Development :: Libraries",
+
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
